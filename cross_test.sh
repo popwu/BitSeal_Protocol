@@ -3,6 +3,7 @@
 # --------------------------------------
 # 1. Go 生成签名 → TS 验证
 # 2. TS 生成签名 → Go 验证
+# 3. BitSeal-RTC
 # 任何一步失败即退出非零
 
 set -euo pipefail
@@ -17,7 +18,7 @@ NC="\033[0m"
 
 echo -e "${GREEN}Step 1: Go client signing …${NC}"
 pushd gocode >/dev/null
-go run ./cross/go_sign.go > ../go_sign.json
+go run ./cross_sign > ../go_sign.json
 popd >/dev/null
 echo -e "${GREEN}Step 2: TS server verifying …${NC}"
 bun run tscode/cross/ts_verify.ts go_sign.json
@@ -30,7 +31,7 @@ echo -e "${GREEN}Step 3: TS client signing …${NC}"
 bun run tscode/cross/ts_sign.ts ts_sign.json
 echo -e "${GREEN}Step 4: Go server verifying …${NC}"
 pushd gocode >/dev/null
-go run ./cross/go_verify.go ../ts_sign.json
+go run ./cross_verify ../ts_sign.json
 popd >/dev/null
 
-echo -e "${GREEN}All BitSeal cross tests passed successfully 🎉${NC}" 
+echo -e "${GREEN}All BitSeal HTTP cross tests passed successfully 🎉${NC}" 

@@ -23,7 +23,7 @@ type Payload struct {
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("usage: go run go_verify.go <json-file>")
+		fmt.Println("usage: go run main.go <json-file>")
 		os.Exit(1)
 	}
 	file := os.Args[1]
