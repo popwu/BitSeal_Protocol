@@ -126,7 +126,7 @@ func NewSession(selfPriv *ec.PrivateKey, peerPub *ec.PublicKey, selfSalt, peerSa
 		key:        key,
 		salt:       selfSalt,
 		seq:        0,
-		recvWindow: &window{size: 128, maxSeq: 0, bitmap: 0},
+		recvWindow: &window{size: 64, maxSeq: 0, bitmap: 0},
 		aead:       aead,
 	}, nil
 }

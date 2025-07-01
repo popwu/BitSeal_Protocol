@@ -43,7 +43,7 @@ export class Session {
     this.key = key
     this.salt = salt
     this.seq = 0n
-    this.windowSize = 128n
+    this.windowSize = 64n
     this.maxSeq = 0n
     this.bitmap = 0n
   }
