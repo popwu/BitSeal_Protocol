@@ -122,10 +122,18 @@ func NewSession(selfPriv *ec.PrivateKey, peerPub *ec.PublicKey, selfSalt, peerSa
 	if err != nil {
 		return nil, err
 	}
+
+	// initialize send sequence with random 64-bit value (seq_init)
+	randBytes := make([]byte, 8)
+	if _, err := rand.Read(randBytes); err != nil {
+		return nil, err
+	}
+	initSeq := binary.BigEndian.Uint64(randBytes)
+
 	return &Session{
 		key:        key,
 		salt:       selfSalt,
-		seq:        0,
+		seq:        initSeq,
 		recvWindow: &window{size: 64, maxSeq: 0, bitmap: 0},
 		aead:       aead,
 	}, nil

@@ -51,7 +51,12 @@ export class Session {
   static create (selfPriv, peerPub, saltSelf, saltPeer) {
     const shared = selfPriv.deriveSharedSecret(peerPub).encode(true)
     const key = deriveKey(shared, saltSelf, saltPeer)
-    return new Session(key, saltSelf)
+    const sess = new Session(key, saltSelf)
+    const rand = randomBytes(8)
+    let init = 0n
+    for (const b of rand) init = (init << 8n) + BigInt(b)
+    sess.seq = init
+    return sess
   }
 
   encode (plaintext, flags = 0) {
