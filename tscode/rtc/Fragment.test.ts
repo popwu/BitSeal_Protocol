@@ -18,7 +18,7 @@ test('fragment roundtrip', () => {
   const saltB = [5,6,7,8]
 
   const sessA = Session.create(self, peer.toPublicKey(), saltA, saltB)
-  const sessB = Session.create(peer, self.toPublicKey(), saltB, saltA)
+  const sessB = Session.create(peer, self.toPublicKey(), saltA, saltB)
 
   const fragA = new Fragmenter(sessA)
   const recvB = new Reassembler(sessB)

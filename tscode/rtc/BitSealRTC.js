@@ -12,13 +12,11 @@ const TAG_SIZE = 16
 
 export const buildHandshake = (selfPriv, peerPub) => {
   const salt = Array.from(randomBytes(4))
-  const msg = {
-    proto: PROTO,
-    pk: selfPriv.toPublicKey().encode(true, 'hex'),
-    salt: toHex(salt),
-    ts: Date.now()
-  }
-  const raw = toArray(JSON.stringify(msg), 'utf8')
+  const ts = Date.now()
+  const pkHex = selfPriv.toPublicKey().encode(true, 'hex')
+  const saltHex = toHex(salt)
+  const rawStr = `{"proto":"${PROTO}","pk":"${pkHex}","salt":"${saltHex}","ts":${ts}}`
+  const raw = toArray(rawStr, 'utf8')
   const sig = brc77Sign(raw, selfPriv, peerPub)
   return { raw, sig, salt }
 }

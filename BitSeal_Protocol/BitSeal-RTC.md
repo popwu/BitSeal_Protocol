@@ -28,7 +28,7 @@ BitSeal-RTC 将安全逻辑拆为两层：
    ```
 2. 双方各自生成 `salt_A / salt_B` 和随机 `nonce`，计算
    ```
-   digest = SHA256(canonical(handshake_msg))
+   digest = SHA256(canonical(handshake_msg))   // canonical = 字段按 proto→pk→salt→ts 排序，且无空格
    sig    = SignedMessage.sign(digest, SK_self, PK_peer)
    ```
 3. 交换 `{handshake_msg, sig}`；验证对方签名后：
@@ -121,7 +121,7 @@ BST2 规定在记录层之上再做**可选的应用层分片**，默认提供�
 ---
 ## 4. 重键与会话更新
 * `seq` ≥ 2⁶⁴-1 或会话持续 >24h ⇒ 触发重新握手（BSH1）。
-* 可支持 KeyUpdate 帧：双方协商新 `salt_session` 并重新置 0 序列号。
+// KeyUpdate 机制留作未来扩展，此处暂不包含。
 
 ---
 ## 5. 可选 BSC3：链式检查点

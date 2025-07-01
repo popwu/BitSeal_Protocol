@@ -10,9 +10,12 @@ import (
 
 func TestFragmentRoundtrip(t *testing.T) {
 	// build deterministic keys (32 bytes with last byte diff)
-	privA, _ := ec.PrivateKeyFromBytes(bytes.Repeat([]byte{0}, 32))
+	privABytes := bytes.Repeat([]byte{0}, 32)
+	privABytes[31] = 1 // ensure non-zero scalar
+	privA, _ := ec.PrivateKeyFromBytes(privABytes)
+
 	privBBytes := bytes.Repeat([]byte{0}, 32)
-	privBBytes[31] = 1
+	privBBytes[31] = 2
 	privB, _ := ec.PrivateKeyFromBytes(privBBytes)
 
 	saltA := []byte{1, 2, 3, 4}
@@ -22,7 +25,7 @@ func TestFragmentRoundtrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	sessB, err := NewSession(privB, privA.PubKey(), saltB, saltA)
+	sessB, err := NewSession(privB, privA.PubKey(), saltA, saltB)
 	if err != nil {
 		t.Fatal(err)
 	}

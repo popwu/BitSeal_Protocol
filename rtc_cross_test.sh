@@ -10,6 +10,14 @@ set -euo pipefail
 GREEN="\033[0;32m"
 NC="\033[0m"
 
+echo -e "${GREEN}Step 0: Go unit tests …${NC}"
+pushd gocode >/dev/null
+go test ./rtc -v
+popd >/dev/null
+
+echo -e "${GREEN}Step 0b: TS unit tests …${NC}"
+bun test tscode/rtc
+
 # ───────────────────────────────────────
 # Go → TS
 # ───────────────────────────────────────

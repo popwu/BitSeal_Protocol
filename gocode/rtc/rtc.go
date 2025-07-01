@@ -36,14 +36,14 @@ func BuildHandshake(selfPriv *ec.PrivateKey, peerPub *ec.PublicKey) ([]byte, []b
 	if _, err := rand.Read(salt); err != nil {
 		return nil, nil, nil, err
 	}
-	msg := HandshakeMsg{
-		Proto: protoString,
-		PK:    hex.EncodeToString(selfPriv.PubKey().Compressed()),
-		Salt:  hex.EncodeToString(salt),
-		Ts:    time.Now().UnixMilli(),
-	}
-	raw, _ := json.Marshal(msg)
+	ts := time.Now().UnixMilli()
+	pkHex := hex.EncodeToString(selfPriv.PubKey().Compressed())
+	saltHex := hex.EncodeToString(salt)
+	// Canonical JSON with deterministic field order
+	rawStr := fmt.Sprintf("{\"proto\":\"%s\",\"pk\":\"%s\",\"salt\":\"%s\",\"ts\":%d}", protoString, pkHex, saltHex, ts)
+	raw := []byte(rawStr)
 	digest := crypto.Sha256(raw)
+
 	sig, err := message.Sign(digest, selfPriv, peerPub)
 	if err != nil {
 		return nil, nil, nil, err

@@ -7,3 +7,4 @@ go_rtc.json
 offer.json
 answer.json
 tscode/node_modules
+.DS_Store
